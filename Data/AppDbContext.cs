@@ -10,6 +10,6 @@ namespace story_brook_api.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Book> Books { get; set; }
-        public DbSet<Wishlist> Wishlist { get; set; }
+        public DbSet<WishBook> WishList { get; set; }
     }
 }
