@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using story_brook_api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://0.0.0.0:5278", "https://0.0.0.0:7073");
 
 // Add services to the container.
 
