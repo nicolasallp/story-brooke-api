@@ -21,18 +21,6 @@ namespace story_brook_api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("story_brook_api.Models.Book", b =>
-                {
-                    b.Property<string>("BookId")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("id");
-
-                    b.HasKey("BookId");
-
-                    b.ToTable("Books");
-                });
-
             modelBuilder.Entity("story_brook_api.Models.User", b =>
                 {
                     b.Property<string>("UserId")
@@ -65,7 +53,7 @@ namespace story_brook_api.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("BookId")
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("book_id");
 
                     b.Property<string>("UserId")
@@ -74,8 +62,6 @@ namespace story_brook_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("WishList");
@@ -83,15 +69,9 @@ namespace story_brook_api.Migrations
 
             modelBuilder.Entity("story_brook_api.Models.WishBook", b =>
                 {
-                    b.HasOne("story_brook_api.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId");
-
                     b.HasOne("story_brook_api.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Book");
 
                     b.Navigation("User");
                 });
