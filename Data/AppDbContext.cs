@@ -9,7 +9,6 @@ namespace story_brook_api.Data
         public AppDbContext(DbContextOptions options) : base(options){}
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Book> Books { get; set; }
         public DbSet<WishBook> WishList { get; set; }
     }
 }
