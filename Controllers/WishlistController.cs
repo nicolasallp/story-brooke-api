@@ -28,7 +28,6 @@ namespace story_brook_api.Controllers
         {
             return await _context.WishList
             .Include(w => w.User)
-            .Include(w => w.Book)
             .Where(w => w.UserId == id).ToListAsync();
         }
 
@@ -85,8 +84,8 @@ namespace story_brook_api.Controllers
             WishBook wishBook = new WishBook
             {
                 Id = Guid.NewGuid().ToString(),
-                User = await _context.Users.FindAsync(wishbookDto.UserId),
-                Book = await _context.Books.FindAsync(wishbookDto.BookId)
+                BookId = wishbookDto.BookId,
+                User = await _context.Users.FindAsync(wishbookDto.UserId)
             };
             _context.WishList.Add(wishBook);
             try
