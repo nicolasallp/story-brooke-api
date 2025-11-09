@@ -23,12 +23,12 @@ namespace story_brook_api.Controllers
         }
 
         // GET: api/Wishlist
-        [HttpGet("ByUser/{id}")]
-        public async Task<ActionResult<IEnumerable<WishBook>>> GetWishListByUser(string id)
+        [HttpGet("ByUser/{userId}")]
+        public async Task<ActionResult<IEnumerable<WishBook>>> GetWishListByUser(string userId)
         {
             return await _context.WishList
             .Include(w => w.User)
-            .Where(w => w.UserId == id).ToListAsync();
+            .Where(w => w.UserId == userId).ToListAsync();
         }
 
         // GET: api/Wishlist/5
@@ -43,37 +43,6 @@ namespace story_brook_api.Controllers
             }
 
             return wishList;
-        }
-
-        // PUT: api/Wishlist/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutWishlist(string id, WishBook wishList)
-        {
-            if (id != wishList.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(wishList).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WishListExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
         }
 
         // POST: api/Wishlist
@@ -108,10 +77,12 @@ namespace story_brook_api.Controllers
         }
 
         // DELETE: api/Wishlist/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWishlist(string id)
+        [HttpDelete("{userId}/{bookId}")]
+        public async Task<IActionResult> DeleteWishlist(string userId, string bookId)
         {
-            var wishList = await _context.WishList.FindAsync(id);
+            var wishList = await _context.WishList
+                .Include(w => w.User)
+                .Where(w => w.UserId == userId && w.BookId == bookId).FirstOrDefaultAsync();
             if (wishList == null)
             {
                 return NotFound();
