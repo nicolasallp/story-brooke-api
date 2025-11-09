@@ -45,10 +45,19 @@ namespace story_brook_api.Controllers
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User user)
+        [HttpPut("{email}")]
+        public async Task<IActionResult> PutUser(string email, UserUpdateDto userDto)
         {
-            if (id != user.UserId)
+            var user = await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.Password = userDto.Password;
+
+            if (email != user.Email)
             {
                 return BadRequest();
             }
@@ -61,7 +70,7 @@ namespace story_brook_api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!UserExists(email))
                 {
                     return NotFound();
                 }
@@ -93,7 +102,7 @@ namespace story_brook_api.Controllers
             }
             catch (DbUpdateException)
             {
-                if (UserExists(user.UserId))
+                if (UserExists(user.Email))
                 {
                     return Conflict();
                 }
@@ -122,9 +131,9 @@ namespace story_brook_api.Controllers
             return NoContent();
         }
 
-        private bool UserExists(string id)
+        private bool UserExists(string email)
         {
-            return _context.Users.Any(e => e.UserId == id);
+            return _context.Users.Any(e => e.Email == email);
         }
     }
 }
